@@ -20,7 +20,7 @@
     </select>
     <br>
     <br>
-    <button>ダウンロード</button>
+    <button id="download-button">ダウンロード</button>
   </form>
   <script>
     /**
@@ -34,6 +34,7 @@
     const elDownloadForm = document.getElementById('download-form');
     const elInputUrl = document.getElementById('input-url');
     const elSelectFileType = document.getElementById('select-file-type');
+    const elSubmitButton = document.getElementById('download-button');
 
     elDownloadForm.addEventListener('submit', (event) => {
       event.preventDefault();
@@ -52,6 +53,8 @@
 
       const fileType = elSelectFileType.value;
 
+      elSubmitButton.disabled = 'true';
+      elSubmitButton.innerText = 'ダウンロード中';
       // ファイルダウンロード
       fetch(`/api/youtube/${youtubeId}?fileType=${fileType}`)
         .then((response) => {
@@ -68,6 +71,10 @@
           document.body.appendChild(a);
           a.click();
           a.remove();
+        })
+        .finally(() => {
+          elSubmitButton.disabled = '';
+          elSubmitButton.innerText = 'ダウンロード';
         });
     });
   </script>
