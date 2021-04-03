@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Youtubeダウンロード</title>
+  <style>
+    #input-url {
+      width: 400px;
+    }
+  </style>
+</head>
+<body>
+  <h1>YouTubeダウンロード</h1>
+  <form id="download-form">
+    <input id="input-url" type="text" placeholder="https://www.youtube.com/watch?v=bnc1NjaFDXA">
+    <select name="type" id="select-file-type">
+      <option value="mp4" selected>mp4</option>
+      <option value="mp3">mp3</option>
+    </select>
+    <br>
+    <br>
+    <button>ダウンロード</button>
+  </form>
+  <script>
+    /**
+     * querystringをパースする
+     */
+    function parseQuery(queryString) {
+      return [...new URLSearchParams(queryString).entries()]
+        .reduce((obj, e) => ({...obj, [e[0]]: e[1]}), {});
+    }
+
+    const elDownloadForm = document.getElementById('download-form');
+    const elInputUrl = document.getElementById('input-url');
+    const elSelectFileType = document.getElementById('select-file-type');
+
+    elDownloadForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      // バリデーションチェック
+      const url = elInputUrl.value;
+      if (!/^https:\/\/www.youtube.com\/watch\?v=/.test(url)) {
+        console.error('url format error');
+        return;
+      }
+
+      // youtubeIdの取得
+      const [_, queryString] = elInputUrl.value.split('?');
+      const query = parseQuery(queryString);
+      const youtubeId = query.v;
+
+      const fileType = elSelectFileType.value;
+
+      // ファイルダウンロード
+      fetch(`/api/youtube/${youtubeId}?fileType=${fileType}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Network error');
+          }
+          return response.blob();
+        })
+        .then((blob) => {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${youtubeId}.${fileType}`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        });
+    });
+  </script>
+</body>
+</html>
