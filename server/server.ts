@@ -56,7 +56,7 @@ app.get('/api/youtube/:youtubeId', (req, res) => {
     // mp3の場合は変換してから返す
     console.log('transform mp4 -> mp3.');
     const mp3FilePath = path.resolve(__dirname, `./tmp/${youtubeId}.mp3`);
-    exec(`ffmpeg -i ${destFilePath} ${mp3FilePath}`, (err, stdout, stderr) => {
+    exec(`ffmpeg -y -i ${destFilePath} ${mp3FilePath}`, (err, stdout, stderr) => {
       if (err) {
         console.error(err);
         res.status(500).send('movie translation error!');

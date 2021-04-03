@@ -17,7 +17,7 @@ video.on('end', () => {
   console.log('end');
   const inputFilePath = path.resolve(__dirname, `./tmp/${YOUTUBE_ID}.mp4`);
   const outputFilePath = path.resolve(__dirname, `./tmp/${YOUTUBE_ID}.mp3`);
-  exec(`ffmpeg -i ${inputFilePath} ${outputFilePath}`, (error, stdout, stderr) => {
+  exec(`ffmpeg -y -i ${inputFilePath} ${outputFilePath}`, (error, stdout, stderr) => {
     if (error) {
       console.error(error);
       return;
