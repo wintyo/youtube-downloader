@@ -3,12 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": ">=12.16.0"
+  },
   "scripts": {
     "_サーバー関係": "",
     "server": "nodemon --exec cross-env TS_NODE_PROJECT=tsconfig-for-node.json ts-node ./server/server.ts --watch server",
     "server:build": "cross-env TS_NODE_PROJECT=tsconfig-for-node.json webpack-cli bundle --config server/webpack.config.server.ts",
     "_ローカルでのテスト": "",
-    "download": "cross-env TS_NODE_PROJECT=tsconfig-for-node.json ts-node scripts/download.ts"
+    "download": "cross-env TS_NODE_PROJECT=tsconfig-for-node.json ts-node scripts/download.ts",
+    "_heroku用のコマンド": "",
+    "heroku-postbuild": "yarn server:build"
   },
   "author": "wintyo <wintyo1024@gmail.com>",
   "license": "MIT",
